@@ -1,0 +1,24 @@
+---
+# handlers file for add_NodeExporter
+- name: Reload firewall after changes
+  systemd:
+    name: firewalld.service
+    state: reloaded
+
+- name: stop_prometheus
+  systemd:
+    name: prometheus
+    state: stop
+    enabled: yes
+    daemon_reload: yes
+- name: start_prometheus
+  systemd:
+    name: prometheus
+    state: start
+    enabled: yes
+    daemon_reload: yes
+- name: reload_prometheus
+  uri:
+    url: http://localhost:9090/-/reload
+    method: POST
+    status_code: 200
